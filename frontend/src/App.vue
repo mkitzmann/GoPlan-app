@@ -7,6 +7,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import {Store} from "./store";
 
 const defaultLayout = "default";
 
@@ -18,8 +19,13 @@ export default defineComponent({
       () => `${currentRoute.value.meta.layout || defaultLayout}-layout`
     );
 
+    const store = computed(
+      () => new Store
+    );
+
     return {
       layout,
+      store
     };
   },
 });
