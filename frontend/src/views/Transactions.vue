@@ -113,23 +113,25 @@ export default defineComponent({
         fields: {
           type       : {},
           executedAt : {
-            justify : 'right',
-            format  : 'date',
+            format: 'date',
           },
           symbol: {
-            sortKey: 'name',
+            sortKey : 'name',
+            visible : 'lg',
           },
           ticker: {
             sortKey: 'symbol',
           },
           quantity: {
             justify : 'right',
+            visible : 'lg',
             format  : value => {
               return value === 0 ? '' : padDecimals(value, 0, 2)
             },
           },
           price: {
             justify : 'right',
+            visible : 'lg',
             format  : (value, row) => {
               return value === 0 ? '' : formatCurrency(value, row.currency, false)
             },
@@ -142,6 +144,7 @@ export default defineComponent({
           },
           fees: {
             justify : 'right',
+            visible : 'md',
             format  : (value, row) => {
               return value === 0 ? '' : formatCurrency(value, row.currency)
             },
@@ -163,6 +166,7 @@ export default defineComponent({
         settings: {
           actions           : false,
           translationPrefix : 'transactions.table',
+          responsive        : false
         },
         filters: {
           accounts: {

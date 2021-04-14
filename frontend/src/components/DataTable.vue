@@ -40,8 +40,10 @@
     </div>
   </div>
   <div
-    :class="`lg:grid-cols-${columnCount}`"
-    class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
+    :class="[
+      settings.responsive ? `hidden lg:grid lg:grid-cols-${columnCount}` : `grid grid-cols-${columnCount}`
+    ]"
+    class="grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
   >
     <div
       v-for="(row, rowIndex) in headerLayout"
@@ -51,10 +53,10 @@
       <div
         v-for="(subRow, subRowIndex) in row"
         :key="subRowIndex"
-        :class="{
-          'lg:text-right': fields[subRow].justify === 'right',
-          'lg:text-center': fields[subRow].justify === 'center'
-        }"
+        :class="[
+          settings.responsive ? 'block lg:hidden' : visibleClass(fields[subRow]),
+          `lg:text-${fields[subRow].justify}`
+        ]"
         class="cursor-pointer hover:text-gray-600 select-none"
         @click="setSort(subRow)"
       >
@@ -66,8 +68,10 @@
   <div
     v-for="(row, rowIndex) in rowsInternal"
     :key="rowIndex"
-    :class="`lg:grid-cols-${columnCount}`"
-    class="mb-2 grid grid-cols-2 sm:grid-cols-2 gap-2 bg-white rounded-lg px-4 py-3"
+    :class="[
+      settings.responsive ? `lg:grid-cols-${columnCount}` : `grid-cols-${columnCount}`
+    ]"
+    class="mb-2 grid grid-cols-2 gap-2 bg-white rounded-lg px-4 py-3"
   >
     <div
       v-for="(cell, cellIndex) in headerLayout"
@@ -79,14 +83,18 @@
         :key="headerIndex"
         :class="[
           header.classes,
+          visibleClass(fields[header]),
           {
             'lg:text-right': fields[header].justify === 'right',
-            'lg:text-center': fields[header].justify === 'center'
+            'lg:text-center': fields[header].justify === 'center',
           }
         ]"
       >
         <div
-          class="block lg:hidden text-sm font-light text-gray-500 cursor-pointer hover:text-blue-600 select-none"
+          class="text-sm font-light text-gray-500 cursor-pointer hover:text-blue-600 select-none"
+          :class="[
+            settings.responsive ? 'block lg:hidden' : 'hidden'
+          ]"
           @click="setSort(header)"
         >
           {{ $t(settings.translationPrefix + '.' + header) }}
@@ -130,7 +138,6 @@ export type TableRow = Record<string, unknown>
 type FormatFn = (value : unknown, row : unknown) => void
 type SearchFn = (value : unknown, searchString : string) => boolean
 
-
 export interface TableHeader {
   key? : string,
   classes? : string,
@@ -138,15 +145,16 @@ export interface TableHeader {
   sortKey? : string
   private? : boolean
   format? : 'date' | 'datetime' | 'time' | 'currency' | 'money' | FormatFn
+  visible?:  'all' | 'sm' | 'md' | 'lg' | '2xl'
 }
-
 
 export interface TableConfig {
   fields : TableHeader[][],
   headerLayout : string[] | string[][],
   settings? : {
     actions : boolean,
-    translationPrefix : string
+    translationPrefix : string,
+    responsive: boolean
   },
   filters : Record<string, any>,
   search : {
@@ -154,12 +162,10 @@ export interface TableConfig {
   }
 }
 
-
 interface SortSettings {
   header : TableHeader,
   order : boolean
 }
-
 
 export default defineComponent({
   components : {SearchField},
@@ -313,6 +319,26 @@ export default defineComponent({
       return rows
     })
 
+    function cellVisibleClass (field : TableHeader) {
+      const visible = field.visible
+      if (visible && visible !== 'all') {
+        return `hidden ${visible}:block`
+      }
+    }
+
+    function columnVisibleClass () {
+      // config.fields.forEach()
+      // const visible = field.visible
+      const actions = props.config.settings.actions ? 1 : 0
+      const test    = Object.values(props.config.headerLayout)
+        .map(key => config.fields[key])
+      console.log(test)
+      // if (visible && visible !== 'all') {
+      //   return `hidden ${visible}:block`
+      // }
+      // return `lg:grid-cols-${count}`
+    }
+
     function setSort (key : string) {
       const header = config.fields[key]
 
@@ -331,6 +357,8 @@ export default defineComponent({
       setSort,
       sort,
       search,
+      visibleClass: cellVisibleClass,
+      columnVisibleClass
     }
   },
 })

@@ -136,7 +136,7 @@ const styleguideRoutes : RouteRecordRaw[] = [
   {
     path      : '/styleguide/modals',
     name      : 'modals',
-    component : StyleguideModals,
+    component : Modals,
   },
 ]
 
