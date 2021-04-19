@@ -7,40 +7,23 @@
       :class="[
         isPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800',
       ]"
-      class=" rounded-lg font-bold p-1 ml-1"
+      class="rounded-lg font-bold p-1 ml-1"
     >
       <span v-if="isPositive">+</span> {{ percent.toFixed(2) }} %
     </div>
     <div
-      :class="[
-        isPositive ? 'text-green-800' : 'text-red-800',
-      ]"
-      class="flex items-center  rounded-lg font-bold"
+      class="flex items-center"
+      :class="isPositive ? 'text-green-800' : 'text-red-800'"
     >
-      <svg
-        :class="isPositive ? '' : 'transform rotate-180'"
-        class="mr-1"
-        fill="none"
-        height="24"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="3"
-        viewBox="0 0 24 24"
-        width="24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <line
-          x1="12"
-          x2="12"
-          y1="19"
-          y2="5"
-        />
-        <polyline points="5 12 12 5 19 12" />
-      </svg>
-      <Private>
-        {{ formatCurrency(change, currency, false) }}
-      </Private>
+      <ArrowDownIcon
+        :class="isPositive ? 'transform rotate-180' : ''"
+        class="h-4 mr-1"
+      />
+      <div>
+        <Private>
+          {{ formatCurrency(change, currency, false) }}
+        </Private>
+      </div>
     </div>
   </div>
 </template>
@@ -49,10 +32,11 @@
 import { AssetPrice, AssetSymbol } from '/@common/models'
 import { formatCurrency } from '/@common/utils'
 import { defineComponent, onUnmounted, ref, watchEffect } from 'vue'
-
+import { ArrowDownIcon } from '@heroicons/vue/outline'
 
 export default defineComponent({
-  props: {
+  components : {ArrowDownIcon},
+  props      : {
     compareFrom: {
       type: [
         String, Number,
