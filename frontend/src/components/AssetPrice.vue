@@ -4,9 +4,7 @@
     class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg"
   >
     <div class="text-5xl font-bold">
-      {{
-        formatCurrency(price.price, symbol.currency, false, 'en_EN', 'always')
-      }}
+      {{ formatCurrency(price.price, symbol.currency, false, 'en-us', 'always') }}
     </div>
     <div class="text-gray-400 font-bold">
       <!-- currency -->
@@ -45,9 +43,9 @@
   )
 
   onUnmounted(async () => {
-    if (liveSubscription) {
+  if (liveSubscription) {
       await liveSubscription.value.unsubscribe()
-    }
+  }
   })
 
   const formatCurrency = CurrencyUtils.formatCurrency
