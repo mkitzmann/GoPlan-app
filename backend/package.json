@@ -39,7 +39,7 @@
     "eodhistoricaldata-openapi": "github:goplan-finance/eodhistoricaldata-openapi-javascript#master",
     "express": "4.17.2",
     "financialmodelingprep-openapi": "github:goplan-finance/financialmodelingprep-openapi-javascript#master",
-    "kerberos": "1.1.5",
+    "kerberos": "2.0.0",
     "module-alias": "^2.2.2",
     "netmask": ">=2.0.1",
     "parse": "3.4.1",
